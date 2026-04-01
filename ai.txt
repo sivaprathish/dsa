@@ -1,12 +1,12 @@
 import google.generativeai as genai
 #pip install -U google-genai
 
-genai.configure(api_key="AIzaSyDRKJt0dd6MJULfeipdgTLm-WjwLfcm-ws")
+genai.configure(api_key="AIzaSyBv56cNaZDg3AC9QKmd_fSrGAiZXbNzYV4")
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 question = input("Enter your programming question: ")
-prompt = f"Generate Python code for: {question}. Return only the code."
+prompt = f"Generate Python code for: {question}. Return only the code, no comments."
 
 try:
     response = model.generate_content(prompt)
