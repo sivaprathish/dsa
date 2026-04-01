@@ -1,0 +1,50 @@
+from queue_array import Queue
+
+def bfs_maze(grid, start, goal):
+    rows, cols = len(grid), len(grid[0])
+
+    q = Queue(rows * cols)
+    visited = [[False] * cols for _ in range(rows)]
+    parent = [[None] * cols for _ in range(rows)]
+
+    q.enqueue(start)
+    visited[start[0]][start[1]] = True
+
+    dirs = [(-1,0),(1,0),(0,-1),(0,1)]
+
+    while not q.is_empty():
+        curr = q.dequeue()
+
+        if curr == goal:
+            path = []
+            while curr:
+                path.append(curr)
+                curr = parent[curr[0]][curr[1]]
+            return path[::-1]
+
+        r, c = curr
+
+        for dr, dc in dirs:
+            nr, nc = r + dr, c + dc
+
+            if (0 <= nr < rows and 0 <= nc < cols and
+                not visited[nr][nc] and grid[nr][nc] == 0):
+
+                visited[nr][nc] = True
+                parent[nr][nc] = (r, c)
+                q.enqueue((nr, nc))
+
+    return None
+
+
+if __name__ == "__main__":
+    maze = [
+        [0,1,0,0,0],
+        [0,1,0,1,0],
+        [0,0,0,0,0],
+        [0,1,1,1,0],
+        [0,0,0,1,0]
+    ]
+
+    path = bfs_maze(maze, (0,0), (4,4))
+    print("Shortest path:", path)
