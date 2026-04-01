@@ -1,0 +1,35 @@
+CLASS TreeNode
+    data
+    left
+    right
+
+CLASS BinaryTree
+    root = NULL
+
+    INSERT_LEFT(parent, data)
+        IF parent == NULL
+            RETURN
+        parent.left = NEW TreeNode(data)
+
+    INSERT_RIGHT(parent, data)
+        IF parent == NULL
+            RETURN
+        parent.right = NEW TreeNode(data)
+
+    INORDER(node)
+        IF node != NULL
+            INORDER(node.left)
+            PRINT node.data
+            INORDER(node.right)
+
+    PREORDER(node)
+        IF node != NULL
+            PRINT node.data
+            PREORDER(node.left)
+            PREORDER(node.right)
+
+    POSTORDER(node)
+        IF node != NULL
+            POSTORDER(node.left)
+            POSTORDER(node.right)
+            PRINT node.data
