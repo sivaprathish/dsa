@@ -1,0 +1,36 @@
+from stack_array import Stack
+
+def evaluate_postfix(postfix):
+    stack = Stack(len(postfix) + 1)
+
+    for char in postfix:
+        if char.isdigit():
+            stack.push(int(char))
+        else:
+            op2 = stack.pop()
+            op1 = stack.pop()
+
+            if op1 is None or op2 is None:
+                print("Invalid postfix")
+                return None
+
+            if char == '+':
+                stack.push(op1 + op2)
+            elif char == '-':
+                stack.push(op1 - op2)
+            elif char == '*':
+                stack.push(op1 * op2)
+            elif char == '/':
+                if op2 == 0:
+                    print("Division by zero")
+                    return None
+                stack.push(op1 // op2)
+
+    return stack.pop()
+
+
+if __name__ == "__main__":
+    test_cases = ["23+", "782*+4*", "12+34*5-", "231*+9-"]
+
+    for expr in test_cases:
+        print(expr, "=", evaluate_postfix(expr))
