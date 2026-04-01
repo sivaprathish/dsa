@@ -2,82 +2,72 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
-        self.prev = None
 
 
-class DoublyLinkedList:
+class CircularLinkedList:
     def __init__(self):
-        self.head = None
         self.tail = None
 
     def insert_end(self, data):
         new_node = Node(data)
 
-        if not self.head:
-            self.head = self.tail = new_node
-            return new_node
+        if not self.tail:
+            self.tail = new_node
+            new_node.next = new_node
+        else:
+            new_node.next = self.tail.next
+            self.tail.next = new_node
+            self.tail = new_node
 
-        new_node.prev = self.tail
-        self.tail.next = new_node
-        self.tail = new_node
         return new_node
 
     def insert_before(self, target_node, data):
-        if target_node is None:
+        if not self.tail or target_node is None:
             return None
 
         new_node = Node(data)
 
-        if target_node == self.head:
-            new_node.next = self.head
-            self.head.prev = new_node
-            self.head = new_node
+        if target_node == self.tail:
+            new_node.next = self.tail.next
+            self.tail.next = new_node
+            self.tail = new_node
             return new_node
 
-        new_node.next = target_node
-        new_node.prev = target_node.prev
-        target_node.prev.next = new_node
-        target_node.prev = new_node
+        curr = self.tail
+        while curr.next != target_node:
+            curr = curr.next
+            if curr == self.tail:
+                return None
 
+        new_node.next = target_node
+        curr.next = new_node
         return new_node
 
-    def delete_node(self, key):
-        curr = self.head
+    def delete_head(self):
+        if self.tail:
+            if self.tail.next == self.tail:
+                self.tail = None
+            else:
+                self.tail.next = self.tail.next.next
 
-        while curr:
-            if curr.data == key:
-                if curr.prev:
-                    curr.prev.next = curr.next
-                else:
-                    self.head = curr.next
+    def print_list(self):
+        if not self.tail:
+            print("Empty")
+            return
 
-                if curr.next:
-                    curr.next.prev = curr.prev
-                else:
-                    self.tail = curr.prev
-
-                return True
-
+        curr = self.tail.next
+        while True:
+            print(curr.data, end=" -> ")
             curr = curr.next
-
-        return False
-
-    def print_forward(self):
-        curr = self.head
-        while curr:
-            print(curr.data, end=" <-> ")
-            curr = curr.next
-        print("None")
+            if curr == self.tail.next:
+                break
+        print("(circular)")
 
 
 if __name__ == "__main__":
-    dll = DoublyLinkedList()
-    nodes = []
+    cll = CircularLinkedList()
 
     for i in range(4):
-        nodes.append(dll.insert_end(i))
+        cll.insert_end(i)
 
-    dll.print_forward()
-
-    dll.insert_before(nodes[2], 10)
-    dll.print_forward()
+    cll.print_list()
