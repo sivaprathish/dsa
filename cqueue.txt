@@ -1,0 +1,54 @@
+class Queue:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.queue = [None] * capacity
+        self.front = self.rear = -1
+
+    def enqueue(self, item):
+        if (self.rear + 1) % self.capacity == self.front:
+            print("Queue Overflow!")
+            return False
+
+        if self.front == -1:
+            self.front = 0
+
+        self.rear = (self.rear + 1) % self.capacity
+        self.queue[self.rear] = item
+        return True
+
+    def dequeue(self):
+        if self.front == -1:
+            print("Queue Underflow!")
+            return None
+
+        item = self.queue[self.front]
+
+        if self.front == self.rear:
+            self.front = self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.capacity
+
+        return item
+
+    def is_empty(self):
+        return self.front == -1
+
+    def size(self):
+        if self.front == -1:
+            return 0
+        return (self.rear - self.front + self.capacity) % self.capacity + 1
+
+
+if __name__ == "__main__":
+    sizes = [10, 100, 1000, 10000]
+    for n in sizes:
+        print(f"\n--- Testing Queue capacity {n} ---")
+        q = Queue(n)
+
+        for i in range(n):
+            q.enqueue(i)
+        print(f"Size after {n} enqueues: {q.size()}")
+
+        for i in range(n // 2):
+            q.dequeue()
+        print(f"Size after {n // 2} dequeues: {q.size()}")
